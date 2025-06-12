@@ -149,3 +149,52 @@ smartrecon/
 - For large datasets (>100,000 transactions), increase the recommended system memory to 8GB+
 - Review the detailed user guide for advanced features and troubleshooting
 - For custom integrations with accounting systems, refer to the API documentation
+
+# Financial Data Generator
+
+This tool generates fake financial data for General Ledger and Bank Statements.
+
+## Environment Setup
+
+Always use conda to create a virtual environment and install packages. Only use pip if a package is not available on conda-forge.
+
+### Creating the environment
+
+```bash
+# Create a new conda environment
+conda create -n financial_data_env python=3.9
+
+# Activate the environment
+conda activate financial_data_env
+
+# Install required packages
+conda install -c conda-forge pandas faker
+```
+
+## Usage
+
+After setting up the environment, you can run the script:
+
+```bash
+# Activate environment (if not already activated)
+conda activate financial_data_env
+
+# Run the script
+python generate_financial_data.py
+```
+
+This will generate two CSV files:
+- A General Ledger CSV with the format `{datetime}_gl_data.csv`
+- A Bank Statement CSV with the format `{datetime}_bank_data.csv`
+
+## Advanced Usage
+
+You can also import the functions in other scripts:
+
+```python
+from generate_financial_data import generate_gl_data, save_gl_data
+
+# Generate custom GL data
+custom_gl_data = generate_gl_data(num_records=200)
+save_gl_data(custom_gl_data, output_dir='data')
+```

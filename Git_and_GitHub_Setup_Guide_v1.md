@@ -118,6 +118,9 @@ This guide provides step-by-step instructions for setting up version control for
 1. Add the remote repository (copy the URL from GitHub):
    ```
    git remote add origin https://github.com/YOUR_USERNAME/financial-reconciliation-tool.git
+
+   https://github.com/sohaniboston/Smart_Recon.git
+
    ```
 
 2. Push your local repository to GitHub:

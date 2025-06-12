@@ -1,6 +1,6 @@
-# Financial Data Reconciliation Tool
+# Financial Data Reconciliation Tool Workflow
 
-## Goal
+## Process Workflow Goal
 Automate reconciliation of GL (General Ledger) entries from two sources (e.g., ERP export vs. bank statement).
 
 ## Detailed Reconciliation Process
