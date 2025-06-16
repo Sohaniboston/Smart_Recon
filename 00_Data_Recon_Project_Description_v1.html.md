@@ -60,6 +60,7 @@ SmartRecon employs Python with Pandas for data processing and reconciliation log
    - Export functionality
 
 ### Solution Code Description (low-level design):
+- **data_financial_data.py**: Creates application testing and simulation data
 - **data_ingestion.py**: Handles file import, validation, and schema mapping
 - **data_cleaning.py**: Implements data standardization and quality enhancement
 - **matching_engine.py**: Contains exact and fuzzy matching algorithms

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartRecon - Intelligent Financial Reconciliation Assistant</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+        }
+        .workflow-section {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .workflow-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        .workflow-column h4 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+        .workflow-column h4:last-of-type {
+            color: #27ae60;
+        }
+        .workflow-column ol {
+            padding-left: 20px;
+        }
+        .workflow-column li {
+            margin-bottom: 8px;
+        }
+        .mermaid-container {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .mermaid {
+            font-family: 'Trebuchet MS', sans-serif;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border-left: 4px solid #3498db;
+        }
+        .code-structure {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .updated-date {
+            color: #6c757d;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI-Powered Data Science & Analytics Project Definition</h1>
+        <p class="updated-date">Updated: 2025.06.09</p>
+
+        <h2>Project Name: SmartRecon - Intelligent Financial Reconciliation Assistant</h2>
+
+        <h2>Project and Work Product Description:</h2>
+        <p>SmartRecon addresses the time-consuming and error-prone process of manual financial reconciliation between GL entries and external sources. Financial analysts currently spend 15-20 hours monthly manually comparing transactions, investigating discrepancies, and documenting exceptions. This solution automates data extraction, standardization, and matching using advanced algorithms, reducing reconciliation time by 70% and improving accuracy. SmartRecon provides a complete workflow from data import to exception reporting, enabling analysts to focus on high-value analytical tasks rather than tedious data comparisons.</p>
+
+        <div class="workflow-section">
+            <h3>Workflow Comparison</h3>
+            <div class="workflow-columns">
+                <div class="workflow-column">
+                    <h4>AS-IS Workflow:</h4>
+                    <ol>
+                        <li>Manual export of data from ERP and banking systems</li>
+                        <li>Manual formatting in Excel</li>
+                        <li>Line-by-line comparison of transactions</li>
+                        <li>Manual documentation of exceptions</li>
+                        <li>Manual creation of adjustment entries</li>
+                        <li>Manual report creation</li>
+                    </ol>
+                </div>
+                <div class="workflow-column">
+                    <h4>TO-BE Workflow:</h4>
+                    <ol>
+                        <li>Automated data import from multiple sources</li>
+                        <li>Intelligent data cleaning and standardization</li>
+                        <li>Algorithm-based transaction matching</li>
+                        <li>Automated exception flagging and categorization</li>
+                        <li>Interactive exception resolution</li>
+                        <li>Automated report generation</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <h2>Financial Reconciliation Workflow Diagram</h2>
+        <div class="mermaid-container">
+            <div class="mermaid">
+flowchart TD
+    Start([Start Reconciliation]) --> DC1
+    
+    %% Step 1: Data Collection
+    subgraph DataCollection [Data Collection]
+        DC1[Extract GL entries from ERP] 
+        DC2[Obtain bank statements]
+        DC3[Validate file formats and completeness]
+    end
+    
+    DC1 --> DC2 --> DC3 --> DP1
+    
+    %% Step 2: Data Preparation
+    subgraph DataPreparation [Data Preparation]
+        DP1[Standardize date formats]
+        DP2[Normalize descriptions]
+        DP3[Convert currency formats] 
+        DP4[Remove duplicates]
+        DP5[Handle missing values]
+    end
+    
+    DP1 --> DP2 --> DP3 --> DP4 --> DP5 --> DM1
+    
+    %% Step 3: Data Mapping
+    subgraph DataMapping [Data Mapping]
+        DM1[Identify matching fields]
+        DM2[Create uniform column names]
+        DM3[Apply business rules for categorization]
+    end
+    
+    DM1 --> DM2 --> DM3 --> RP1
+    
+    %% Step 4: Reconciliation Process
+    subgraph ReconProcess [Reconciliation Process]
+        RP1[Match transactions on key identifiers]
+        RP2[Identify exact matches]
+        RP3[Apply fuzzy matching]
+        RP4[Flag unmatched items]
+        RP5[Calculate variances]
+    end
+    
+    RP1 --> RP2 --> RP3 --> RP4 --> RP5 --> EH1
+    
+    %% Step 5: Exception Handling
+    subgraph ExceptionHandling [Exception Handling]
+        EH1[Categorize exceptions]
+        EH2[Investigate unmatched items]
+        EH3[Document explanations]
+        EH4{Need adjustments?}
+        EH5[Create adjustment entries]
+        EH6[Mark as reviewed]
+    end
+    
+    EH1 --> EH2 --> EH3 --> EH4
+    EH4 -->|Yes| EH5 --> R1
+    EH4 -->|No| EH6 --> R1
+    
+    %% Step 6: Reporting
+    subgraph Reporting [Reporting]
+        R1[Generate reconciliation summary]
+        R2[Create exception reports]
+        R3[Produce audit trail]
+        R4[Create visualizations]
+    end
+    
+    R1 --> R2 --> R3 --> R4 --> D1
+    
+    %% Step 7: Documentation
+    subgraph Documentation [Documentation]
+        D1[Save reconciliation state]
+        D2[Document explanations]
+        D3[Export finalized reconciliation]
+    end
+    
+    D1 --> D2 --> D3 --> End([End Reconciliation])
+    
+    %% Styling
+    classDef process fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef decision fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef startend fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    
+    class DataCollection,DataPreparation,DataMapping,ReconProcess,ExceptionHandling,Reporting,Documentation process
+    class EH4 decision
+    class Start,End startend
+            </div>
+        </div>
+
+        <h2>Description of Solution:</h2>
+        <p>SmartRecon employs Python with Pandas for data processing and reconciliation logic, automating the entire workflow from data import to reporting. The system accepts multiple file formats, performs intelligent data cleaning, applies exact and fuzzy matching algorithms to identify corresponding transactions, and generates comprehensive reports. The MVP (v1.0) delivers core reconciliation functionality with command-line interface, supporting CSV/Excel imports, basic matching algorithms, and standard reports. Future versions will introduce a Streamlit-based GUI (v2.0), advanced matching algorithms with machine learning (v3.0), and integration capabilities with accounting systems (v4.0).</p>
+
+        <h2>Solution Design (high-level):</h2>
+        <ol>
+            <li><strong>Data Ingestion Module</strong>
+                <ul>
+                    <li>File upload/import functionality</li>
+                    <li>Format validation</li>
+                    <li>Schema detection</li>
+                    <li>Initial data quality assessment</li>
+                </ul>
+            </li>
+            <li><strong>Data Preparation Module</strong>
+                <ul>
+                    <li>Date standardization</li>
+                    <li>Amount normalization</li>
+                    <li>Description cleaning</li>
+                    <li>Missing value handling</li>
+                    <li>Duplicate detection</li>
+                </ul>
+            </li>
+            <li><strong>Reconciliation Engine</strong>
+                <ul>
+                    <li>Exact matching algorithm</li>
+                    <li>Fuzzy matching for descriptions</li>
+                    <li>Variance calculation</li>
+                    <li>Exception categorization</li>
+                </ul>
+            </li>
+            <li><strong>Exception Management</strong>
+                <ul>
+                    <li>Classification of unmatched items</li>
+                    <li>Suggested matching based on similarity</li>
+                    <li>Manual match interface</li>
+                    <li>Exception documentation</li>
+                </ul>
+            </li>
+            <li><strong>Reporting Module</strong>
+                <ul>
+                    <li>Summary statistics</li>
+                    <li>Exception detailed reports</li>
+                    <li>Visualizations</li>
+                    <li>Export functionality</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>Solution Code Description (low-level design):</h3>
+        <ul>
+            <li><strong>data_financial_data.py</strong>: Creates application testing and simulation data</li>
+            <li><strong>data_ingestion.py</strong>: Handles file import, validation, and schema mapping</li>
+            <li><strong>data_cleaning.py</strong>: Implements data standardization and quality enhancement</li>
+            <li><strong>matching_engine.py</strong>: Contains exact and fuzzy matching algorithms</li>
+            <li><strong>exception_handler.py</strong>: Manages unmatched transactions and classifications</li>
+            <li><strong>reporting.py</strong>: Generates reports and visualizations</li>
+            <li><strong>main.py</strong>: Orchestrates the reconciliation workflow</li>
+            <li><strong>config.py</strong>: Contains configuration parameters</li>
+            <li><strong>utils.py</strong>: Utility functions used across modules</li>
+        </ul>
+
+        <h3>Actual Working Product Code:</h3>
+        <p>The complete code repository will be hosted on GitHub with the following structure:</p>
+        <div class="code-structure">
+smartrecon/
+├── src/
+│   ├── data_ingestion.py
+│   ├── data_cleaning.py
+│   ├── matching_engine.py
+│   ├── exception_handler.py
+│   ├── reporting.py
+│   ├── main.py
+│   ├── config.py
+│   └── utils.py
+├── tests/
+│   ├── test_data_ingestion.py
+│   ├── test_data_cleaning.py
+│   ├── test_matching_engine.py
+│   ├── test_exception_handler.py
+│   └── test_reporting.py
+├── examples/
+│   ├── sample_gl_data.csv
+│   ├── sample_bank_data.csv
+│   └── example_config.json
+├── docs/
+│   ├── user_guide.md
+│   └── developer_guide.md
+├── requirements.txt
+└── README.md
+        </div>
+
+        <h2>List of SDLC Documents</h2>
+        <ol>
+            <li>Project Requirements Specification</li>
+            <li>Functional Design Document</li>
+            <li>Technical Design Document</li>
+            <li>Test Plan and Test Cases</li>
+            <li>User Manual</li>
+            <li>Installation Guide</li>
+            <li>Version History and Change Log</li>
+        </ol>
+
+        <h2>Application Instructions:</h2>
+
+        <h3>Installation and Setup</h3>
+        <ol>
+            <li>Ensure Python 3.8+ is installed on your system</li>
+            <li>Clone the repository: <code>git clone https://github.com/organization/smartrecon.git</code></li>
+            <li>Navigate to the project directory: <code>cd smartrecon</code></li>
+            <li>Create a virtual environment: <code>python -m venv venv</code></li>
+            <li>Activate the virtual environment:
+                <ul>
+                    <li>Windows: <code>venv\Scripts\activate</code></li>
+                    <li>macOS/Linux: <code>source venv/bin/activate</code></li>
+                </ul>
+            </li>
+            <li>Install dependencies: <code>pip install -r requirements.txt</code></li>
+        </ol>
+
+        <h3>Running the Application</h3>
+        <ol>
+            <li>Prepare your source files (GL extract and bank statement) in CSV or Excel format</li>
+            <li>For command-line interface (v1.0):
+                <pre>python src/main.py --gl-file path/to/gl_file.csv --bank-file path/to/bank_file.csv --output-dir path/to/output</pre>
+            </li>
+            <li>For GUI interface (v2.0+):
+                <pre>python src/app.py</pre>
+                Then access the web interface at <code>http://localhost:8501</code>
+            </li>
+        </ol>
+
+        <h3>Configuration</h3>
+        <ol>
+            <li>Create a configuration file following the template in <code>examples/example_config.json</code></li>
+            <li>Specify column mappings for your specific file formats</li>
+            <li>Set matching criteria and tolerance levels</li>
+            <li>Configure reporting preferences</li>
+        </ol>
+
+        <h3>Data Requirements</h3>
+        <ul>
+            <li>Files must contain at minimum: transaction date, amount, and reference/description fields</li>
+            <li>Dates should be in standard formats (YYYY-MM-DD preferred)</li>
+            <li>Amount columns should be numeric or standard currency format</li>
+            <li>Files should cover the same time period for effective reconciliation</li>
+        </ul>
+
+        <div class="highlight">
+            <h3>Additional Important Guidelines</h3>
+            <ul>
+                <li>Regularly backup your reconciliation files and reports</li>
+                <li>For large datasets (>100,000 transactions), increase the recommended system memory to 8GB+</li>
+                <li>Review the detailed user guide for advanced features and troubleshooting</li>
+                <li>For custom integrations with accounting systems, refer to the API documentation</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            }
+        });
+    </script>
+</body>
+</html>

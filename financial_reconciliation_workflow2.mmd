@@ -1,0 +1,84 @@
+# Financial Data Reconciliation Workflow
+
+```mermaid
+flowchart TD
+    Start([Start Reconciliation]) --> DataCollection
+    
+    %% Step 1: Data Collection
+    subgraph DataCollection["1. Data Collection"]
+        DC1[Extract GL entries from ERP] --> DC2[Obtain bank statements]
+        DC2 --> DC3[Validate file formats and completeness]
+    end
+    
+    %% Step 2: Data Preparation
+    DataCollection --> DataPrep
+    subgraph DataPrep["2. Data Preparation"]
+        DP1[Standardize date formats] --> DP2[Normalize descriptions]
+        DP2 --> DP3[Convert currency formats]
+        DP3 --> DP4[Remove duplicates]
+        DP4 --> DP5[Handle missing values]
+    end
+    
+    %% Step 3: Data Mapping
+    DataPrep --> DataMapping
+    subgraph DataMapping["3. Data Mapping"]
+        DM1[Identify matching fields] --> DM2[Create uniform column names]
+        DM2 --> DM3[Apply business rules for categorization]
+    end
+    
+    %% Step 4: Reconciliation Process
+    DataMapping --> ReconciliationProcess
+    subgraph ReconciliationProcess["4. Reconciliation Process"]
+        RP1[Match transactions on key identifiers] --> RP2[Identify exact matches]
+        RP2 --> RP3[Apply fuzzy matching]
+        RP3 --> RP4[Flag unmatched items]
+        RP4 --> RP5[Calculate variances]
+    end
+    
+    %% Step 5: Exception Handling
+    ReconciliationProcess --> ExceptionHandling
+    subgraph ExceptionHandling["5. Exception Handling"]
+        EH1[Categorize exceptions] --> EH2[Investigate unmatched items]
+        EH2 --> EH3[Document explanations]
+        EH3 --> EH4{Need adjustments?}
+        EH4 -->|Yes| EH5[Create adjustment entries]
+        EH4 -->|No| EH6[Mark as reviewed]
+    end
+    
+    %% Step 6: Reporting
+    ExceptionHandling --> Reporting
+    subgraph Reporting["6. Reporting"]
+        R1[Generate reconciliation summary] --> R2[Create exception reports]
+        R2 --> R3[Produce audit trail]
+        R3 --> R4[Create visualizations]
+    end
+    
+    %% Step 7: Documentation
+    Reporting --> Documentation
+    subgraph Documentation["7. Documentation"]
+        D1[Save reconciliation state] --> D2[Document explanations]
+        D2 --> D3[Export finalized reconciliation]
+    end
+    
+    Documentation --> End([End Reconciliation])
+    
+    %% Styling
+    classDef process fill:#f9f9f9,stroke:#333,stroke-width:1px;
+    classDef decision fill:#ffcccc,stroke:#333,stroke-width:1px;
+    class DataCollection,DataPrep,DataMapping,ReconciliationProcess,ExceptionHandling,Reporting,Documentation process;
+    class EH4 decision;
+```
+
+## Workflow Description
+
+This diagram represents the complete financial reconciliation process from start to finish:
+
+1. **Data Collection**: Gathering information from different sources
+2. **Data Preparation**: Cleaning and standardizing the data
+3. **Data Mapping**: Creating a uniform structure for comparison
+4. **Reconciliation Process**: Identifying matches and discrepancies
+5. **Exception Handling**: Addressing and resolving discrepancies
+6. **Reporting**: Creating summaries and visualizations of results
+7. **Documentation**: Recording the reconciliation for future reference
+
+The workflow follows a linear progression with a decision point in the Exception Handling phase to determine if adjustment entries are needed.

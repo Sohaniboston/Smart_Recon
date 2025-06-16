@@ -31,3 +31,8 @@ tutorial_topic = "Python functions with all types of arguments"
 
 Generate a 10-lesson tutorial on {tutorial_topic} Faker with complete code examples and detailed ELI5 explanations of each example.  Save this tutorial into a Jupyter Notebook.  
 
+###############################################
+modify generate_financial_data.py to create two folders one name GL_data and another bank_data and move generated file into the appropiate folder
+
+###############################################
+Create 
