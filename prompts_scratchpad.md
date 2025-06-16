@@ -35,4 +35,4 @@ Generate a 10-lesson tutorial on {tutorial_topic} Faker with complete code examp
 modify generate_financial_data.py to create two folders one name GL_data and another bank_data and move generated file into the appropiate folder
 
 ###############################################
-Create 
+Generate a visual diagram in mermaid.js format from attached workflow outline. Explain to me how to display it and what are my options.
