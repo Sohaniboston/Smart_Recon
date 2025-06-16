@@ -198,3 +198,8 @@ from generate_financial_data import generate_gl_data, save_gl_data
 custom_gl_data = generate_gl_data(num_records=200)
 save_gl_data(custom_gl_data, output_dir='data')
 ```
+
+## Documentation
+
+- 📋 [Project Definition (HTML)](https://htmlpreview.github.io/?https://github.com/yourusername/yourrepo/blob/main/00_Financial_Data_Reconciliation_Tool_Project_Definition_v1.html)
+- 📊 [Interactive Workflow Diagram](https://mermaid.live/view#base64:encodedmermaidcode)
