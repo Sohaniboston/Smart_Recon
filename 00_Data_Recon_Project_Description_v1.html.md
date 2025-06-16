@@ -152,6 +152,7 @@ smartrecon/
 - For custom integrations with accounting systems, refer to the API documentation
 
 ## Work Flow Diagram 
+```Mermaid
 flowchart TD
     Start([Start Reconciliation]) --> DC1
     
