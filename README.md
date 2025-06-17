@@ -111,14 +111,35 @@ smartrecon/
 ## Application Instructions:
 
 ### Installation and Setup
-1. Ensure Python 3.8+ is installed on your system
-2. Clone the repository: `git clone https://github.com/organization/smartrecon.git`
-3. Navigate to the project directory: `cd smartrecon`
-4. Create a virtual environment: `python -m venv venv`
-5. Activate the virtual environment:
-   - Windows: `venv\Scripts\activate`
-   - macOS/Linux: `source venv/bin/activate`
-6. Install dependencies: `pip install -r requirements.txt`
+
+**Preferred Method: Using Conda (Recommended)**
+
+```bash
+# 1. Create a new conda environment
+conda create -n smart_recon_apps python=3.9
+
+# 2. Activate the environment
+conda activate smart_recon_apps
+
+# 3. Change to the folder where you want your project "root" folder to be located.
+cd "c:/users/<<your_username>>/documents/"
+
+# 4. Clone the repository (this will create a folder "Smart_Recon" in your projectd root folder)
+git clone https://github.com/Sohaniboston/Smart_Recon.git
+
+# 5. Install packages using conda (preferred)
+conda install -c conda-forge pandas numpy faker matplotlib seaborn openpyxl xlrd streamlit plotly fuzzywuzzy python-levenshtein
+
+# 6. Install additional packages if available via conda
+conda install -c conda-forge streamlit plotly fuzzywuzzy python-levenshtein
+
+# 7. Only use pip for packages not available in conda 
+   #(For example, IF python-levenshtein were NOT available in conda format)
+# pip install python-levenshtein
+
+# 8. Install any remaining pip packages using a requirements file (optional)
+# pip install -r requirements.txt --no-deps
+```
 
 ### Running the Application
 1. Prepare your source files (GL extract and bank statement) in CSV or Excel format
@@ -154,22 +175,7 @@ smartrecon/
 
 This tool generates fake financial data for General Ledger and Bank Statements.
 
-## Environment Setup
 
-Always use conda to create a virtual environment and install packages. Only use pip if a package is not available on conda-forge.
-
-### Creating the environment
-
-```bash
-# Create a new conda environment
-conda create -n financial_data_env python=3.9
-
-# Activate the environment
-conda activate financial_data_env
-
-# Install required packages
-conda install -c conda-forge pandas faker
-```
 
 ## Usage
 
