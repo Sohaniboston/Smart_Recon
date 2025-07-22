@@ -1,8 +1,6 @@
-# AI-Powered Data Science & Analytics Project Definition
+## Project Name: SmartRecon - Intelligent Financial Reconciliation Assistant
 
 - Updated: 2025.06.09
-
-## Project Name: SmartRecon - Intelligent Financial Reconciliation Assistant
 
 ## Project and Work Product Description:
 SmartRecon addresses the time-consuming and error-prone process of manual financial reconciliation between GL entries and external sources. Financial analysts currently spend 15-20 hours monthly manually comparing transactions, investigating discrepancies, and documenting exceptions. This solution automates data extraction, standardization, and matching using advanced algorithms, reducing reconciliation time by 70% and improving accuracy. SmartRecon provides a complete workflow from data import to exception reporting, enabling analysts to focus on high-value analytical tasks rather than tedious data comparisons.
@@ -101,8 +99,7 @@ smartrecon/
 ```
 
 ## List of SDLC Documents
-1. Project Requirements Specification
-2. Functional Design Document
+1. Product Requirements Specification (PRD)
 3. Technical Design Document
 4. Test Plan and Test Cases
 5. User Manual
