@@ -1,0 +1,11 @@
+transaction_date,memo,value,ref_number
+invalid_date,Poor Quality Transaction 1,$396.63,GL001
+2024-01-02 00:00:00,Poor Quality Transaction 2,$409.35,GL002
+invalid_date,,$965.77,GL003
+2024-01-04 00:00:00,Poor Quality Transaction 4,invalid,GL004
+invalid_date,Poor Quality Transaction 5,$664.5,GL005
+2024-01-06 00:00:00,,$899.81,
+invalid_date,Poor Quality Transaction 7,$248.29,GL007
+2024-01-08 00:00:00,Poor Quality Transaction 8,invalid,GL008
+invalid_date,,$-606.38,GL009
+2024-01-10 00:00:00,Poor Quality Transaction 10,$-947.9,GL010

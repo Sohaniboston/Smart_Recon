@@ -1,0 +1,26 @@
+date,description,amount,balance,reference
+2024-01-01,Bank Transaction 1 - Payment,119.56,-25.29,BK001
+2024-01-02,Bank Transaction 2 - Payment,-1854.82,10.46,BK002
+2024-01-03,Bank Transaction 3 - Payment,-1049.59,65.2,BK003
+2024-01-04,Bank Transaction 4 - Payment,-2296.33,15.12,BK004
+2024-01-05,Bank Transaction 5 - Payment,1022.12,52.06,BK005
+2024-01-06,Bank Transaction 6 - Payment,2374.66,-20.76,BK006
+2024-01-07,Bank Transaction 7 - Payment,-1970.46,68.74,BK007
+2024-01-08,Bank Transaction 8 - Payment,-1262.47,48.75,BK008
+2024-01-09,Bank Transaction 9 - Payment,678.71,54.58,BK009
+2024-01-10,Bank Transaction 10 - Payment,-3069.48,28.25,BK010
+2024-01-11,Bank Transaction 11 - Payment,3697.66,9.98,BK011
+2024-01-12,Bank Transaction 12 - Payment,-668.29,-11.05,BK012
+2024-01-13,Bank Transaction 13 - Payment,-2164.65,-73.59,BK013
+2024-01-14,Bank Transaction 14 - Payment,-1904.67,-48.43,BK014
+2024-01-15,Bank Transaction 15 - Payment,-3575.73,46.12,BK015
+2024-01-16,Bank Transaction 16 - Payment,3866.63,68.14,BK016
+2024-01-17,Bank Transaction 17 - Payment,-1146.2,19.84,BK017
+2024-01-18,Bank Transaction 18 - Payment,3891.86,59.19,BK018
+2024-01-19,Bank Transaction 19 - Payment,-457.97,131.02,BK019
+2024-01-20,Bank Transaction 20 - Payment,-2361.4,182.94,BK020
+2024-01-21,Bank Transaction 21 - Payment,1771.61,119.33,BK021
+2024-01-22,Bank Transaction 22 - Payment,2502.66,75.97,BK022
+2024-01-23,Bank Transaction 23 - Payment,1018.99,14.12,BK023
+2024-01-24,Bank Transaction 24 - Payment,-1953.85,77.33,BK024
+2024-01-25,Bank Transaction 25 - Payment,-173.93,176.16,BK025
