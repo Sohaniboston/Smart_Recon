@@ -1,0 +1,6 @@
+Date,Amount,Description,Reference,Account
+2025-01-01,100.50,Valid description,REF001,12345
+invalid_date,invalid_amount,,,12345
+2025-01-03,,   Whitespace   ,REF003,
+,,,,
+01/05/2025,$250.75,Normal desc,REF005,67890

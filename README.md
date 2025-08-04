@@ -63,23 +63,23 @@ The reconciliation process generates reports in the specified output directory:
 smartrecon/
 ├── src/                          # Source code
 │   ├── modules/                  # Core functional modules
-│   │   ├── data_ingestion.py    # File loading and validation
-│   │   ├── data_cleaning.py     # Data standardization
-│   │   ├── matching_engine.py   # Transaction matching algorithms
-│   │   ├── exception_handler.py # Exception management
-│   │   └── reporting.py         # Report generation
+│   │   ├── data_ingestion.py     # File loading and validation
+│   │   ├── data_cleaning.py      # Data standardization
+│   │   ├── matching_engine.py    # Transaction matching algorithms
+│   │   ├── exception_handler.py  # Exception management
+│   │   └── reporting.py          # Report generation
 │   ├── utils/                    # Utility functions
-│   │   ├── logger.py            # Logging configuration
-│   │   ├── exceptions.py        # Custom exceptions
-│   │   ├── validators.py        # Data validation
-│   │   └── helpers.py           # Helper functions
+│   │   ├── logger.py             # Logging configuration
+│   │   ├── exceptions.py         # Custom exceptions
+│   │   ├── validators.py         # Data validation
+│   │   └── helpers.py            # Helper functions
 │   ├── main.py                   # CLI entry point
 │   └── config.py                 # Configuration management
 ├── config/                       # Configuration files
-│   └── default_config.json      # Default configuration
+│   └── default_config.json       # Default configuration
 ├── tests/                        # Test suite
 ├── examples/                     # Example data and configurations
-├── docs/                         # Documentation
+├── docs/                         # Documentation, User Guides, 
 ├── requirements.txt              # Python dependencies
 └── setup.py                      # Package installation
 ```

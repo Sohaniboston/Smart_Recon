@@ -57,16 +57,16 @@ class ExceptionHandler:
         logger.info("ExceptionHandler module initialized")
     
     def process_exceptions(self, 
-                          unmatched_df1: List[Dict], 
-                          unmatched_df2: List[Dict],
+                          unmatched_df1: Union[pd.DataFrame, List[Dict]], 
+                          unmatched_df2: Union[pd.DataFrame, List[Dict]],
                           df1_type: str = 'gl',
                           df2_type: str = 'bank') -> Dict[str, Any]:
         """
         Process unmatched transactions and categorize exceptions.
         
         Args:
-            unmatched_df1 (List[Dict]): Unmatched records from first dataset
-            unmatched_df2 (List[Dict]): Unmatched records from second dataset
+            unmatched_df1: Unmatched records from first dataset (DataFrame or List of Dict)
+            unmatched_df2: Unmatched records from second dataset (DataFrame or List of Dict)
             df1_type (str): Type of first dataset
             df2_type (str): Type of second dataset
             
@@ -77,14 +77,25 @@ class ExceptionHandler:
             ExceptionHandlerError: If exception processing fails
         """
         try:
-            logger.info(f"Processing exceptions: {len(unmatched_df1)} + {len(unmatched_df2)} unmatched records")
+            # Convert inputs to DataFrames if needed
+            if isinstance(unmatched_df1, list):
+                df1_unmatched = pd.DataFrame(unmatched_df1) if unmatched_df1 else pd.DataFrame()
+            else:
+                df1_unmatched = unmatched_df1 if unmatched_df1 is not None else pd.DataFrame()
+                
+            if isinstance(unmatched_df2, list):
+                df2_unmatched = pd.DataFrame(unmatched_df2) if unmatched_df2 else pd.DataFrame()
+            else:
+                df2_unmatched = unmatched_df2 if unmatched_df2 is not None else pd.DataFrame()
+                
+            logger.info(f"Processing exceptions: {len(df1_unmatched)} + {len(df2_unmatched)} unmatched records")
             
             # Initialize results structure
             results = {
                 'session_id': datetime.now().strftime("%Y%m%d_%H%M%S"),
                 'input_summary': {
-                    'unmatched_df1_count': len(unmatched_df1),
-                    'unmatched_df2_count': len(unmatched_df2),
+                    'unmatched_df1_count': len(df1_unmatched),
+                    'unmatched_df2_count': len(df2_unmatched),
                     'df1_type': df1_type,
                     'df2_type': df2_type
                 },
@@ -100,10 +111,6 @@ class ExceptionHandler:
             }
             
             start_time = datetime.now()
-            
-            # Convert to DataFrames for easier processing
-            df1_unmatched = pd.DataFrame(unmatched_df1) if unmatched_df1 else pd.DataFrame()
-            df2_unmatched = pd.DataFrame(unmatched_df2) if unmatched_df2 else pd.DataFrame()
             
             # Process each dataset
             if not df1_unmatched.empty:

@@ -1,0 +1,6 @@
+Date,Amount,Description,Reference,Account
+2025-01-01,1000.0,Payment from customer A,PAY001,67890
+2025-01-02,-50.25,Service charge,SVC001,67890
+2025-01-03,750.5,Deposit B,DEP001,67890
+2025-01-06,500.0,Different payment,PAY003,67890
+2025-01-07,-30.0,Other fee,FEE002,67890

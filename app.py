@@ -29,6 +29,7 @@ import os
 import click
 import logging
 import json
+import pandas as pd
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 from datetime import datetime
@@ -45,11 +46,13 @@ try:
     from src.modules.data_cleaning import DataCleaner
     from src.modules.matching_engine import MatchingEngine
     from src.modules.exact_matching_engine import ExactMatchingEngine
+    from src.modules.fuzzy_matching import FuzzyMatcher
     from src.modules.exception_handler import ExceptionHandler
     from src.modules.reporting import ReportGenerator
     from src.modules.basic_reporting import BasicReporter
     from src.utils.logger import setup_logger
     from src.utils.exceptions import SmartReconException
+    from src.utils.performance import PerformanceMonitor, ProgressTracker as EnhancedProgressTracker, monitor_performance
 except ImportError as e:
     print(f"❌ Import error: {e}")
     print("Please ensure all required modules are properly installed and accessible.")
@@ -452,7 +455,10 @@ def reconcile(ctx, gl_file: str, bank_file: str, output_dir: str,
         
         # Progress tracking
         total_steps = 6 if quick else 8
-        progress = ProgressTracker(total_steps, "Reconciliation")
+        progress = EnhancedProgressTracker(total_steps, "Reconciliation", enable_eta=True)
+        
+        # Initialize performance monitoring
+        perf_monitor = PerformanceMonitor(enable_memory_tracking=True)
         
         # Initialize components
         ingestion = DataIngestion(config)
@@ -460,80 +466,105 @@ def reconcile(ctx, gl_file: str, bank_file: str, output_dir: str,
         exact_engine = ExactMatchingEngine(config)
         
         # Step 1: Load GL data
-        progress.step("Loading GL data")
-        gl_result = ingestion.load_file(gl_file, file_type='gl')
-        gl_data = gl_result['data']
-        
-        logger.info(f"Loaded {len(gl_data)} GL records")
+        with perf_monitor.monitor_operation("GL Data Loading", record_count=0):
+            progress.step("Loading GL data")
+            gl_result = ingestion.load_file(gl_file, file_type='gl')
+            gl_data = gl_result['data']
+            
+            logger.info(f"Loaded {len(gl_data)} GL records")
         
         # Step 2: Load bank data
-        progress.step("Loading bank data")
-        bank_result = ingestion.load_file(bank_file, file_type='bank')
-        bank_data = bank_result['data']
-        
-        logger.info(f"Loaded {len(bank_data)} bank records")
+        with perf_monitor.monitor_operation("Bank Data Loading", record_count=0):
+            progress.step("Loading bank data")
+            bank_result = ingestion.load_file(bank_file, file_type='bank')
+            bank_data = bank_result['data']
+            
+            logger.info(f"Loaded {len(bank_data)} bank records")
         
         # Step 3: Clean GL data
-        progress.step("Cleaning GL data")
-        gl_clean_result = cleaner.clean_data(gl_data, data_type='gl')
-        gl_clean = gl_clean_result['cleaned_data']
+        with perf_monitor.monitor_operation("GL Data Cleaning", record_count=len(gl_data)):
+            progress.step("Cleaning GL data", record_count=len(gl_data))
+            gl_clean_result = cleaner.clean_data(gl_data, data_type='gl')
+            gl_clean = gl_clean_result['cleaned_data']
         
         # Step 4: Clean bank data
-        progress.step("Cleaning bank data")
-        bank_clean_result = cleaner.clean_data(bank_data, data_type='bank')
-        bank_clean = bank_clean_result['cleaned_data']
+        with perf_monitor.monitor_operation("Bank Data Cleaning", record_count=len(bank_data)):
+            progress.step("Cleaning bank data", record_count=len(bank_data))
+            bank_clean_result = cleaner.clean_data(bank_data, data_type='bank')
+            bank_clean = bank_clean_result['cleaned_data']
         
         # Step 5: Exact matching
-        progress.step("Performing exact matching")
+        with perf_monitor.monitor_operation("Exact Matching", record_count=len(gl_clean) + len(bank_clean)):
+            progress.step("Performing exact matching", record_count=len(gl_clean) + len(bank_clean))
         
-        # Update exact engine configuration
-        exact_engine.params['amount_tolerance'] = amount_tolerance
-        
-        exact_results = exact_engine.reconcile_exact_matches(gl_clean, bank_clean)
-        
-        exact_matches = exact_engine.export_matches_to_dataframe()
-        unmatched = exact_engine.get_unmatched_records()
-        
-        logger.info(f"Exact matches found: {len(exact_matches)}")
+            # Update exact engine configuration
+            exact_engine.params['amount_tolerance'] = amount_tolerance
+            
+            exact_results = exact_engine.reconcile_exact_matches(gl_clean, bank_clean)
+            
+            exact_matches = exact_engine.export_matches_to_dataframe()
+            unmatched = exact_engine.get_unmatched_records()
+            
+            logger.info(f"Exact matches found: {len(exact_matches)}")
         
         # Step 6: Fuzzy matching (if not quick mode and requested)
-        fuzzy_matches = None
+        fuzzy_matches = pd.DataFrame()
         if not quick and ('fuzzy' in match_strategy or 'all' in match_strategy):
-            progress.step("Performing fuzzy matching")
+            with perf_monitor.monitor_operation("Fuzzy Matching", record_count=len(unmatched['gl']) + len(unmatched['bank'])):
+                progress.step("Performing fuzzy matching", record_count=len(unmatched['gl']) + len(unmatched['bank']))
             
-            # Initialize fuzzy matching engine
-            fuzzy_engine = MatchingEngine(config)
-            
-            # Run fuzzy matching on unmatched records
-            fuzzy_results = fuzzy_engine.run_matching(
-                unmatched['gl'], unmatched['bank'], 'gl', 'bank'
-            )
-            
-            # Process fuzzy results
-            total_fuzzy = sum(len(matches) for matches in fuzzy_results['matches'].values())
-            logger.info(f"Fuzzy matches found: {total_fuzzy}")
-            
-            # Update unmatched records
-            unmatched['gl'] = fuzzy_results['unmatched']['df1']
-            unmatched['bank'] = fuzzy_results['unmatched']['df2']
+                # Initialize fuzzy matching engine
+                fuzzy_engine = FuzzyMatcher(config)
+                
+                # Run fuzzy matching on unmatched records
+                fuzzy_results = fuzzy_engine.find_fuzzy_matches(
+                    unmatched['gl'], unmatched['bank']
+                )
+                
+                # Get fuzzy matches as DataFrame
+                fuzzy_matches = fuzzy_engine.export_matches_to_dataframe()
+                potential_matches = fuzzy_engine.export_potential_matches_to_dataframe()
+                
+                # Process fuzzy results
+                total_fuzzy = len(fuzzy_matches)
+                total_potential = len(potential_matches)
+                logger.info(f"Fuzzy matches found: {total_fuzzy} automatic, {total_potential} requiring review")
+                
+                # Update unmatched records (remove those that were fuzzy matched)
+                remaining_unmatched = fuzzy_engine.get_unmatched_records(
+                    unmatched['gl'], unmatched['bank']
+                )
+                unmatched['gl'] = remaining_unmatched['gl']
+                unmatched['bank'] = remaining_unmatched['bank']
         
         # Step 7: Exception handling
+        exception_results = None
+        output_files = []  # Initialize output files list
+        
         if not quick:
-            progress.step("Processing exceptions")
+            with perf_monitor.monitor_operation("Exception Processing", record_count=len(unmatched['gl']) + len(unmatched['bank'])):
+                progress.step("Processing exceptions", record_count=len(unmatched['gl']) + len(unmatched['bank']))
             
-            exception_handler = ExceptionHandler(config)
-            exception_results = exception_handler.process_exceptions(
-                unmatched['gl'], unmatched['bank'], 'gl', 'bank'
-            )
-            
-            total_exceptions = exception_results['statistics']['total_exceptions']
-            logger.info(f"Exceptions processed: {total_exceptions}")
+                exception_handler = ExceptionHandler(config)
+                exception_results = exception_handler.process_exceptions(
+                    unmatched['gl'], unmatched['bank'], 'gl', 'bank'
+                )
+                
+                total_exceptions = exception_results['statistics'].get('total_exceptions', 0)
+                logger.info(f"Exceptions processed: {total_exceptions}")
+                
+                # Export exception analysis
+                if exception_results and export_format in ['excel', 'all']:
+                    exception_path = os.path.join(output_dir, 'exception_analysis.json')
+                    with open(exception_path, 'w') as f:
+                        json.dump(exception_results, f, indent=2, default=str)
+                    output_files.append(exception_path)
         
         # Step 8: Generate reports
-        progress.step("Generating reports")
+        with perf_monitor.monitor_operation("Report Generation", record_count=len(exact_matches) + len(fuzzy_matches)):
+            progress.step("Generating reports", record_count=len(exact_matches) + len(fuzzy_matches))
         
         # Export exact matches
-        output_files = []
         
         if not exact_matches.empty:
             if export_format in ['excel', 'all']:
@@ -545,6 +576,30 @@ def reconcile(ctx, gl_file: str, bank_file: str, output_dir: str,
                 csv_path = os.path.join(output_dir, 'exact_matches.csv')
                 exact_matches.to_csv(csv_path, index=False)
                 output_files.append(csv_path)
+        
+        # Export fuzzy matches (if any)
+        if not fuzzy_matches.empty:
+            if export_format in ['excel', 'all']:
+                fuzzy_excel_path = os.path.join(output_dir, 'fuzzy_matches.xlsx')
+                fuzzy_matches.to_excel(fuzzy_excel_path, index=False)
+                output_files.append(fuzzy_excel_path)
+            
+            if export_format in ['csv', 'all']:
+                fuzzy_csv_path = os.path.join(output_dir, 'fuzzy_matches.csv')
+                fuzzy_matches.to_csv(fuzzy_csv_path, index=False)
+                output_files.append(fuzzy_csv_path)
+        
+        # Export potential matches for review (if any)
+        if not quick and 'potential_matches' in locals() and not potential_matches.empty:
+            if export_format in ['excel', 'all']:
+                potential_excel_path = os.path.join(output_dir, 'potential_matches_for_review.xlsx')
+                potential_matches.to_excel(potential_excel_path, index=False)
+                output_files.append(potential_excel_path)
+            
+            if export_format in ['csv', 'all']:
+                potential_csv_path = os.path.join(output_dir, 'potential_matches_for_review.csv')
+                potential_matches.to_csv(potential_csv_path, index=False)
+                output_files.append(potential_csv_path)
         
         # Export unmatched records
         if not unmatched['gl'].empty:
@@ -564,6 +619,10 @@ def reconcile(ctx, gl_file: str, bank_file: str, output_dir: str,
             output_files.append(unmatched_bank_path)
         
         # Generate summary report
+        total_exact = len(exact_matches)
+        total_fuzzy = len(fuzzy_matches) if not fuzzy_matches.empty else 0
+        total_potential = len(potential_matches) if not quick and 'potential_matches' in locals() and not potential_matches.empty else 0
+        
         summary = {
             'reconciliation_timestamp': datetime.now().isoformat(),
             'input_files': {
@@ -577,19 +636,25 @@ def reconcile(ctx, gl_file: str, bank_file: str, output_dir: str,
                 'bank_cleaned': len(bank_clean)
             },
             'match_results': {
-                'exact_matches': len(exact_matches),
+                'exact_matches': total_exact,
+                'fuzzy_matches': total_fuzzy,
+                'potential_matches': total_potential,
+                'total_matches': total_exact + total_fuzzy,
                 'gl_unmatched': len(unmatched['gl']),
                 'bank_unmatched': len(unmatched['bank'])
             },
             'match_rates': {
-                'gl_match_rate': (len(exact_matches) / len(gl_clean) * 100) if len(gl_clean) > 0 else 0,
-                'bank_match_rate': (len(exact_matches) / len(bank_clean) * 100) if len(bank_clean) > 0 else 0
+                'gl_match_rate': ((total_exact + total_fuzzy) / len(gl_clean) * 100) if len(gl_clean) > 0 else 0,
+                'bank_match_rate': ((total_exact + total_fuzzy) / len(bank_clean) * 100) if len(bank_clean) > 0 else 0,
+                'exact_match_rate': (total_exact / len(gl_clean) * 100) if len(gl_clean) > 0 else 0,
+                'fuzzy_match_rate': (total_fuzzy / len(gl_clean) * 100) if len(gl_clean) > 0 else 0
             },
             'configuration': {
                 'amount_tolerance': amount_tolerance,
                 'strategies_used': list(match_strategy),
                 'quick_mode': quick
-            }
+            },
+            'exception_analysis': exception_results['statistics'] if exception_results else None
         }
         
         summary_path = os.path.join(output_dir, 'reconciliation_summary.json')
@@ -597,16 +662,32 @@ def reconcile(ctx, gl_file: str, bank_file: str, output_dir: str,
             json.dump(summary, f, indent=2, default=str)
         output_files.append(summary_path)
         
+        # Export performance metrics
+        perf_summary = perf_monitor.get_performance_summary()
+        perf_recommendations = perf_monitor.get_optimization_recommendations()
+        
+        performance_path = os.path.join(output_dir, 'performance_metrics.json')
+        with open(performance_path, 'w') as f:
+            json.dump({
+                'performance_summary': perf_summary,
+                'optimization_recommendations': perf_recommendations
+            }, f, indent=2, default=str)
+        output_files.append(performance_path)
+        
         progress.complete("Reconciliation completed")
         
         # Display results summary
         if not ctx.obj['quiet']:
             click.echo(f"\n📊 Reconciliation Results:")
-            click.echo(f"  ✅ Exact matches: {len(exact_matches):,}")
+            click.echo(f"  ✅ Exact matches: {total_exact:,}")
+            if total_fuzzy > 0:
+                click.echo(f"  🔍 Fuzzy matches: {total_fuzzy:,}")
+            if total_potential > 0:
+                click.echo(f"  ❓ Potential matches (review needed): {total_potential:,}")
             click.echo(f"  📋 GL records processed: {len(gl_clean):,}")
             click.echo(f"  📋 Bank records processed: {len(bank_clean):,}")
-            click.echo(f"  🎯 GL match rate: {summary['match_rates']['gl_match_rate']:.1f}%")
-            click.echo(f"  🎯 Bank match rate: {summary['match_rates']['bank_match_rate']:.1f}%")
+            click.echo(f"  🎯 Overall GL match rate: {summary['match_rates']['gl_match_rate']:.1f}%")
+            click.echo(f"  🎯 Overall Bank match rate: {summary['match_rates']['bank_match_rate']:.1f}%")
             click.echo(f"  ⚠️  GL unmatched: {len(unmatched['gl']):,}")
             click.echo(f"  ⚠️  Bank unmatched: {len(unmatched['bank']):,}")
             
@@ -624,6 +705,22 @@ def reconcile(ctx, gl_file: str, bank_file: str, output_dir: str,
                 if quick:
                     click.echo(f"  • Try fuzzy matching: add --match-strategy fuzzy")
                 click.echo(f"  • Generate detailed reports: python app.py basic-report {output_dir}/*.xlsx")
+            
+            # Display performance summary
+            if perf_summary.get('overview'):
+                click.echo(f"\n⚡ Performance Summary:")
+                exec_time = perf_summary.get('execution_time', {})
+                if exec_time:
+                    click.echo(f"  • Total processing time: {exec_time.get('total_seconds', 0):.2f}s")
+                    click.echo(f"  • Average operation time: {exec_time.get('average_seconds', 0):.2f}s")
+                
+                processing = perf_summary.get('processing_rate', {})
+                if processing:
+                    click.echo(f"  • Processing rate: {processing.get('average_records_per_second', 0):.1f} records/sec")
+                
+                # Show top recommendation
+                if perf_recommendations:
+                    click.echo(f"  • Top recommendation: {perf_recommendations[0]}")
         
     except Exception as e:
         logger.error(f"Reconciliation failed: {e}")

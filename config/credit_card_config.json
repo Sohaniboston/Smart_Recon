@@ -1,0 +1,196 @@
+{
+  "name": "Credit Card Reconciliation Configuration",
+  "description": "Specialized configuration for credit card statement reconciliation with expense reports",
+  "version": "1.1.0",
+  "last_updated": "2025-07-29",
+  
+  "data_ingestion": {
+    "supported_formats": ["csv", "xlsx", "xls"],
+    "encoding": "utf-8",
+    "auto_detect_encoding": true,
+    "auto_detect_delimiter": true,
+    "max_file_size_mb": 50,
+    "chunk_size": 5000,
+    "validate_on_load": true
+  },
+  
+  "column_mappings": {
+    "bank_data": {
+      "date": ["Transaction Date", "Purchase Date", "Post Date", "Date"],
+      "amount": ["Amount", "Purchase Amount", "Transaction Amount", "Charge Amount"],
+      "description": ["Merchant", "Description", "Merchant Name", "Vendor", "Details"],
+      "reference": ["Transaction ID", "Reference", "Auth Code", "Confirmation Number"],
+      "card_number": ["Card Number", "Card", "Account Number"]
+    },
+    "gl_data": {
+      "date": ["Expense Date", "Report Date", "Receipt Date", "Date"],
+      "amount": ["Amount", "Expense Amount", "Receipt Amount", "Cost"],
+      "description": ["Vendor", "Merchant", "Description", "Expense Description"],
+      "category": ["Category", "Expense Category", "Type", "Classification"],
+      "employee": ["Employee", "Employee Name", "Requestor"],
+      "receipt_id": ["Receipt ID", "Receipt Number", "Reference", "Document ID"]
+    }
+  },
+  
+  "data_cleaning": {
+    "date_formats": [
+      "%Y-%m-%d",
+      "%m/%d/%Y", 
+      "%d/%m/%Y",
+      "%Y/%m/%d",
+      "%d-%m-%Y",
+      "%m-%d-%Y"
+    ],
+    "amount_tolerance": 0.01,
+    "duplicate_threshold": 0.90,
+    "standardize_descriptions": true,
+    "remove_special_characters": true,
+    "normalize_whitespace": true,
+    "convert_to_uppercase": true,
+    "handle_currency_symbols": true,
+    "handle_parentheses_negative": false,
+    "trim_descriptions": true,
+    "merchant_name_cleaning": {
+      "remove_location_suffixes": true,
+      "remove_store_numbers": true,
+      "standardize_common_merchants": true,
+      "remove_extra_spaces": true
+    }
+  },
+  
+  "exact_matching": {
+    "amount_tolerance": 0.01,
+    "date_range_days": 7,
+    "require_reference_match": false,
+    "case_sensitive_description": false,
+    "enable_amount_tolerance": true,
+    "enable_date_range": true,
+    "prioritize_amount_matches": true,
+    "matching_strategies": ["perfect", "amount_date", "amount_tolerance"]
+  },
+  
+  "fuzzy_matching": {
+    "similarity_threshold": 0.7,
+    "confidence_threshold": 0.8,
+    "max_suggestions": 15,
+    "algorithms": ["token_set_ratio", "partial_ratio", "token_sort_ratio"],
+    "algorithm_weights": {
+      "token_set_ratio": 0.5,
+      "partial_ratio": 0.3,
+      "token_sort_ratio": 0.2
+    },
+    "enable_caching": true,
+    "require_manual_approval": true,
+    "auto_accept_threshold": 0.92,
+    "enable_amount_weighting": true,
+    "amount_weight": 0.4,
+    "description_weight": 0.5,
+    "date_weight": 0.1,
+    "merchant_specific_rules": {
+      "gas_stations": {
+        "keywords": ["shell", "bp", "exxon", "chevron", "mobil"],
+        "similarity_threshold": 0.6
+      },
+      "restaurants": {
+        "keywords": ["restaurant", "cafe", "bistro", "grill", "pizza"],
+        "similarity_threshold": 0.75
+      },
+      "hotels": {
+        "keywords": ["hotel", "inn", "resort", "lodge", "marriott", "hilton"],
+        "similarity_threshold": 0.8
+      }
+    }
+  },
+  
+  "exception_handling": {
+    "categorize_exceptions": true,
+    "exception_categories": {
+      "missing_receipts": {
+        "description_patterns": ["no receipt", "missing", "lost receipt"],
+        "auto_flag": true
+      },
+      "personal_expenses": {
+        "description_patterns": ["personal", "private", "family"],
+        "require_justification": true
+      },
+      "duplicate_submissions": {
+        "check_amount_date": true,
+        "check_merchant": true,
+        "tolerance_days": 1
+      },
+      "policy_violations": {
+        "over_limit_amounts": 500.00,
+        "restricted_merchants": ["bar", "liquor", "casino"],
+        "auto_flag": true
+      }
+    },
+    "generate_resolution_suggestions": true,
+    "track_exception_history": true,
+    "employee_specific_tracking": true
+  },
+  
+  "reporting": {
+    "output_directory": "reports/credit_card",
+    "generate_excel": true,
+    "generate_csv": true,
+    "generate_pdf": true,
+    "include_charts": true,
+    "include_summary_statistics": true,
+    "include_match_details": true,
+    "include_exception_analysis": true,
+    "employee_specific_reports": true,
+    "category_analysis": true,
+    "policy_compliance_report": true,
+    "excel_formatting": {
+      "highlight_exceptions": true,
+      "color_code_matches": true,
+      "freeze_header_rows": true,
+      "auto_fit_columns": true,
+      "conditional_formatting": true
+    }
+  },
+  
+  "performance": {
+    "enable_monitoring": true,
+    "batch_size": 500,
+    "parallel_processing": false,
+    "memory_limit_mb": 500,
+    "cache_similarity_results": true,
+    "optimize_large_datasets": false,
+    "progress_reporting": true,
+    "enable_profiling": false
+  },
+  
+  "logging": {
+    "level": "INFO",
+    "log_to_file": true,
+    "log_file_path": "logs/cc_reconciliation.log",
+    "max_log_size_mb": 10,
+    "backup_count": 5,
+    "include_performance_logs": true,
+    "detailed_matching_logs": true,
+    "employee_activity_logs": true
+  },
+  
+  "validation": {
+    "validate_data_types": true,
+    "check_required_columns": true,
+    "validate_date_ranges": true,
+    "check_amount_reasonableness": true,
+    "max_amount_threshold": 10000.00,
+    "min_amount_threshold": 0.01,
+    "validate_duplicates": true,
+    "check_employee_authorization": false,
+    "validate_expense_categories": true
+  },
+  
+  "compliance": {
+    "expense_policy_validation": true,
+    "maximum_meal_amount": 100.00,
+    "maximum_hotel_amount": 300.00,
+    "restricted_categories": ["entertainment", "alcohol", "personal"],
+    "require_receipts_over": 25.00,
+    "mileage_rate_validation": 0.655,
+    "foreign_transaction_handling": true
+  }
+}

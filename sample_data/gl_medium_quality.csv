@@ -1,0 +1,16 @@
+date,description,amount,reference,account
+2024-01-01,GL Transaction 1 - Medium Quality,1642.93,GL001,ACC02
+2024-01-02,GL Transaction 2 - Medium Quality,-369.89,GL002,ACC03
+,GL Transaction 3 - Medium Quality,1725.37,GL003,ACC01
+2024-01-04,,879.31,GL004,ACC02
+2024-01-05,GL Transaction 5 - Medium Quality,-2840.01,,ACC03
+,GL Transaction 6 - Medium Quality,-492.19,GL006,ACC01
+2024-01-07,GL Transaction 7 - Medium Quality,-2293.13,GL007,ACC02
+2024-01-08,,196.4,GL008,ACC03
+,GL Transaction 9 - Medium Quality,-807.3,GL009,ACC01
+2024-01-10,GL Transaction 10 - Medium Quality,-1333.75,,ACC02
+2024-01-11,GL Transaction 11 - Medium Quality,-1256.75,GL011,ACC03
+,,1121.74,GL012,ACC01
+2024-01-13,GL Transaction 13 - Medium Quality,373.2,GL013,ACC02
+2024-01-14,GL Transaction 14 - Medium Quality,429.41,GL014,ACC03
+,GL Transaction 15 - Medium Quality,358.59,,ACC01

@@ -1,0 +1,21 @@
+date,description,amount,reference,account
+2024-01-01,GL Transaction 1 - High Quality,-379.16,GL001,ACC02
+2024-01-02,GL Transaction 2 - High Quality,-3648.0,GL002,ACC03
+2024-01-03,GL Transaction 3 - High Quality,941.28,GL003,ACC04
+2024-01-04,GL Transaction 4 - High Quality,4232.98,GL004,ACC05
+2024-01-05,GL Transaction 5 - High Quality,-106.65,GL005,ACC01
+2024-01-06,GL Transaction 6 - High Quality,-4310.85,GL006,ACC02
+2024-01-07,GL Transaction 7 - High Quality,2651.55,GL007,ACC03
+2024-01-08,GL Transaction 8 - High Quality,4130.4,GL008,ACC04
+2024-01-09,GL Transaction 9 - High Quality,4599.47,GL009,ACC05
+2024-01-10,GL Transaction 10 - High Quality,-1289.11,GL010,ACC01
+2024-01-11,GL Transaction 11 - High Quality,-3973.39,GL011,ACC02
+2024-01-12,GL Transaction 12 - High Quality,-2947.71,GL012,ACC03
+2024-01-13,GL Transaction 13 - High Quality,3377.22,GL013,ACC04
+2024-01-14,GL Transaction 14 - High Quality,-4875.6,GL014,ACC05
+2024-01-15,GL Transaction 15 - High Quality,4778.58,GL015,ACC01
+2024-01-16,GL Transaction 16 - High Quality,-177.09,GL016,ACC02
+2024-01-17,GL Transaction 17 - High Quality,1532.89,GL017,ACC03
+2024-01-18,GL Transaction 18 - High Quality,-3875.15,GL018,ACC04
+2024-01-19,GL Transaction 19 - High Quality,4703.22,GL019,ACC05
+2024-01-20,GL Transaction 20 - High Quality,-4896.73,GL020,ACC01

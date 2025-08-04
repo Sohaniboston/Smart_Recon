@@ -1,0 +1,28 @@
+{
+  "created_date": "2025-07-29T10:37:11.970732",
+  "datasets": {
+    "basic": {
+      "gl_records": 5,
+      "bank_records": 5,
+      "description": "Basic test data with exact matches"
+    },
+    "fuzzy": {
+      "gl_records": 4,
+      "bank_records": 4,
+      "description": "Test data for fuzzy matching scenarios"
+    },
+    "corrupted": {
+      "records": 5,
+      "description": "Data with quality issues for error handling tests"
+    },
+    "large": {
+      "gl_records": 1000,
+      "bank_records": 1000,
+      "description": "Large dataset for performance testing"
+    },
+    "edge_cases": {
+      "records": 5,
+      "description": "Edge cases and extreme values"
+    }
+  }
+}

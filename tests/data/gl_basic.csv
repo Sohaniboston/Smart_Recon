@@ -1,0 +1,6 @@
+Date,Amount,Description,Reference,Account
+2025-01-01,1000.0,Customer payment A,PAY001,12345
+2025-01-02,-50.25,Bank service charge,SVC001,12345
+2025-01-03,750.5,Customer deposit B,DEP001,12345
+2025-01-04,2000.0,Large customer payment,PAY002,12345
+2025-01-05,-25.0,Monthly fee,FEE001,12345

@@ -1,0 +1,186 @@
+{
+  "name": "High Volume Dataset Configuration",
+  "description": "Optimized configuration for processing large datasets (50,000+ transactions)",
+  "version": "1.1.0",
+  "last_updated": "2025-07-29",
+  
+  "data_ingestion": {
+    "supported_formats": ["csv", "xlsx"],
+    "encoding": "utf-8",
+    "auto_detect_encoding": true,
+    "auto_detect_delimiter": true,
+    "max_file_size_mb": 1000,
+    "chunk_size": 25000,
+    "validate_on_load": false,
+    "streaming_mode": true,
+    "memory_efficient_loading": true
+  },
+  
+  "column_mappings": {
+    "bank_data": {
+      "date": ["Transaction Date", "Date", "Value Date"],
+      "amount": ["Amount", "Transaction Amount"],
+      "description": ["Description", "Details"],
+      "reference": ["Reference", "Transaction ID"]
+    },
+    "gl_data": {
+      "date": ["GL Date", "Posting Date"],
+      "amount": ["Amount", "Net Amount"],
+      "description": ["Description", "GL Description"],
+      "reference": ["Reference", "Document Number"]
+    }
+  },
+  
+  "data_cleaning": {
+    "date_formats": [
+      "%Y-%m-%d",
+      "%m/%d/%Y", 
+      "%d/%m/%Y"
+    ],
+    "amount_tolerance": 0.01,
+    "duplicate_threshold": 0.98,
+    "standardize_descriptions": false,
+    "remove_special_characters": false,
+    "normalize_whitespace": true,
+    "convert_to_uppercase": false,
+    "handle_currency_symbols": true,
+    "handle_parentheses_negative": true,
+    "trim_descriptions": true,
+    "batch_processing": true,
+    "parallel_cleaning": true
+  },
+  
+  "exact_matching": {
+    "amount_tolerance": 0.01,
+    "date_range_days": 3,
+    "require_reference_match": false,
+    "case_sensitive_description": false,
+    "enable_amount_tolerance": true,
+    "enable_date_range": true,
+    "prioritize_reference_matches": true,
+    "matching_strategies": ["perfect", "amount_date", "reference_amount"],
+    "batch_processing": true,
+    "parallel_matching": true,
+    "use_hash_indexing": true,
+    "optimize_memory_usage": true
+  },
+  
+  "fuzzy_matching": {
+    "similarity_threshold": 0.85,
+    "confidence_threshold": 0.90,
+    "max_suggestions": 5,
+    "algorithms": ["token_set_ratio"],
+    "algorithm_weights": {
+      "token_set_ratio": 1.0
+    },
+    "enable_caching": true,
+    "require_manual_approval": true,
+    "auto_accept_threshold": 0.95,
+    "enable_amount_weighting": true,
+    "amount_weight": 0.4,
+    "description_weight": 0.6,
+    "date_weight": 0.0,
+    "use_fast_algorithm": true,
+    "batch_processing": true,
+    "parallel_processing": true,
+    "max_comparisons": 500000,
+    "pre_filter_by_amount": true,
+    "amount_filter_range": 0.1,
+    "skip_low_priority_matches": true
+  },
+  
+  "exception_handling": {
+    "categorize_exceptions": true,
+    "exception_categories": {
+      "timing_differences": {
+        "date_threshold_days": 7
+      },
+      "amount_discrepancies": {
+        "tolerance_exceeded": 0.10
+      },
+      "missing_transactions": {
+        "auto_detect": false
+      }
+    },
+    "generate_resolution_suggestions": false,
+    "track_exception_history": false,
+    "batch_processing": true
+  },
+  
+  "reporting": {
+    "output_directory": "reports/high_volume",
+    "generate_excel": true,
+    "generate_csv": true,
+    "generate_pdf": false,
+    "include_charts": false,
+    "include_summary_statistics": true,
+    "include_match_details": false,
+    "include_exception_analysis": true,
+    "split_large_reports": true,
+    "max_rows_per_file": 100000,
+    "compression": true,
+    "summary_only_mode": false,
+    "excel_formatting": {
+      "highlight_exceptions": false,
+      "color_code_matches": false,
+      "freeze_header_rows": true,
+      "auto_fit_columns": false
+    }
+  },
+  
+  "performance": {
+    "enable_monitoring": true,
+    "batch_size": 10000,
+    "parallel_processing": true,
+    "max_workers": 4,
+    "memory_limit_mb": 4000,
+    "cache_similarity_results": true,
+    "optimize_large_datasets": true,
+    "progress_reporting": true,
+    "enable_profiling": true,
+    "garbage_collection_frequency": 1000,
+    "memory_threshold_warning": 3000,
+    "auto_optimize_batch_size": true,
+    "performance_monitoring_interval": 100
+  },
+  
+  "logging": {
+    "level": "WARNING",
+    "log_to_file": true,
+    "log_file_path": "logs/high_volume_reconciliation.log",
+    "max_log_size_mb": 50,
+    "backup_count": 10,
+    "include_performance_logs": true,
+    "detailed_matching_logs": false,
+    "log_memory_usage": true,
+    "log_processing_milestones": true
+  },
+  
+  "validation": {
+    "validate_data_types": false,
+    "check_required_columns": true,
+    "validate_date_ranges": false,
+    "check_amount_reasonableness": false,
+    "validate_duplicates": false,
+    "quick_validation_mode": true
+  },
+  
+  "optimization": {
+    "use_columnar_storage": true,
+    "compress_intermediate_results": true,
+    "minimize_memory_copies": true,
+    "use_efficient_data_types": true,
+    "optimize_string_operations": true,
+    "cache_frequent_operations": true,
+    "parallel_data_loading": true,
+    "streaming_processing": true,
+    "lazy_evaluation": true
+  },
+  
+  "thresholds": {
+    "fuzzy_matching_threshold": 10000,
+    "detailed_reporting_threshold": 50000,
+    "memory_optimization_threshold": 100000,
+    "streaming_mode_threshold": 250000
+  }
+}

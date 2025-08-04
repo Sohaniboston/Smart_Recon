@@ -1,0 +1,6 @@
+Date,Amount,Description,Reference,Account
+2025-01-01,0.0,Zero amount transaction,ZERO001,12345
+2025-01-01,0.0,Duplicate zero amount,ZERO001,12345
+2025-01-02,999999999.99,Very large positive amount,LARGE001,12345
+2025-01-03,-999999999.99,Very large negative amount,LARGE002,12345
+2025-01-04,0.01,Very small amount,SMALL001,12345

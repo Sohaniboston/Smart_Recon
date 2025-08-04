@@ -1,0 +1,234 @@
+{
+  "name": "Investment Portfolio Reconciliation Configuration",
+  "description": "Specialized configuration for investment and portfolio reconciliation",
+  "version": "1.1.0",
+  "last_updated": "2025-07-29",
+  
+  "data_ingestion": {
+    "supported_formats": ["csv", "xlsx", "xml"],
+    "encoding": "utf-8",
+    "auto_detect_encoding": true,
+    "auto_detect_delimiter": true,
+    "max_file_size_mb": 500,
+    "chunk_size": 10000,
+    "validate_on_load": true,
+    "streaming_mode": false,
+    "handle_multi_currency": true,
+    "currency_conversion_required": true
+  },
+  
+  "column_mappings": {
+    "portfolio_data": {
+      "security_id": ["Security ID", "ISIN", "CUSIP", "Symbol"],
+      "security_name": ["Security Name", "Description"],
+      "quantity": ["Quantity", "Shares", "Units"],
+      "price": ["Price", "Unit Price", "Market Price"],
+      "market_value": ["Market Value", "Value", "Total Value"],
+      "currency": ["Currency", "CCY"],
+      "settlement_date": ["Settlement Date", "Trade Date"],
+      "portfolio_id": ["Portfolio", "Account", "Fund ID"]
+    },
+    "custodian_data": {
+      "security_id": ["Security Identifier", "ISIN", "CUSIP"],
+      "security_name": ["Security Description", "Name"],
+      "quantity": ["Position", "Holdings", "Shares"],
+      "price": ["Price", "Last Price"],
+      "market_value": ["Market Value", "Valuation"],
+      "currency": ["Currency", "Base Currency"],
+      "settlement_date": ["Value Date", "As Of Date"],
+      "account_id": ["Account Number", "Portfolio ID"]
+    }
+  },
+  
+  "data_cleaning": {
+    "date_formats": [
+      "%Y-%m-%d",
+      "%m/%d/%Y", 
+      "%d/%m/%Y",
+      "%Y%m%d"
+    ],
+    "amount_tolerance": 0.01,
+    "duplicate_threshold": 0.95,
+    "standardize_security_ids": true,
+    "normalize_security_names": true,
+    "handle_currency_symbols": true,
+    "convert_to_base_currency": true,
+    "base_currency": "USD",
+    "price_precision": 6,
+    "quantity_precision": 8,
+    "validate_security_identifiers": true,
+    "handle_corporate_actions": true,
+    "split_adjustments": true
+  },
+  
+  "exact_matching": {
+    "amount_tolerance": 0.01,
+    "quantity_tolerance": 0.001,
+    "price_tolerance": 0.0001,
+    "date_range_days": 1,
+    "require_security_id_match": true,
+    "require_portfolio_match": true,
+    "case_sensitive_security_names": false,
+    "prioritize_security_id_matches": true,
+    "matching_strategies": [
+      "security_id_quantity_price",
+      "security_id_market_value",
+      "security_name_quantity"
+    ],
+    "currency_matching_required": true,
+    "settlement_date_matching": true,
+    "use_isin_fallback": true,
+    "use_cusip_fallback": true
+  },
+  
+  "fuzzy_matching": {
+    "similarity_threshold": 0.80,
+    "confidence_threshold": 0.85,
+    "max_suggestions": 3,
+    "algorithms": ["token_set_ratio", "partial_ratio"],
+    "algorithm_weights": {
+      "token_set_ratio": 0.7,
+      "partial_ratio": 0.3
+    },
+    "enable_caching": true,
+    "require_manual_approval": true,
+    "auto_accept_threshold": 0.95,
+    "enable_security_name_matching": true,
+    "security_name_weight": 0.4,
+    "quantity_weight": 0.3,
+    "market_value_weight": 0.3,
+    "ignore_common_suffixes": true,
+    "common_suffixes": ["INC", "CORP", "LTD", "PLC", "CLASS A", "CLASS B"],
+    "handle_ticker_variations": true,
+    "use_security_type_filtering": true
+  },
+  
+  "exception_handling": {
+    "categorize_exceptions": true,
+    "exception_categories": {
+      "price_discrepancies": {
+        "tolerance_exceeded": 0.05,
+        "check_market_data": true
+      },
+      "quantity_differences": {
+        "tolerance_exceeded": 0.001,
+        "check_corporate_actions": true
+      },
+      "missing_positions": {
+        "auto_detect": true,
+        "threshold_amount": 1000
+      },
+      "currency_mismatches": {
+        "auto_convert": true,
+        "flag_suspicious": true
+      },
+      "settlement_timing": {
+        "tolerance_days": 3,
+        "check_trade_calendar": true
+      }
+    },
+    "generate_resolution_suggestions": true,
+    "track_exception_history": true,
+    "integration_with_market_data": false,
+    "corporate_action_checking": false
+  },
+  
+  "reporting": {
+    "output_directory": "reports/portfolio",
+    "generate_excel": true,
+    "generate_csv": true,
+    "generate_pdf": true,
+    "include_charts": true,
+    "include_summary_statistics": true,
+    "include_match_details": true,
+    "include_exception_analysis": true,
+    "portfolio_level_summary": true,
+    "security_level_detail": true,
+    "currency_breakdown": true,
+    "asset_class_analysis": true,
+    "excel_formatting": {
+      "highlight_exceptions": true,
+      "color_code_matches": true,
+      "conditional_formatting": true,
+      "freeze_header_rows": true,
+      "auto_fit_columns": true,
+      "add_charts": true,
+      "summary_dashboard": true
+    },
+    "custom_reports": {
+      "position_variance_report": true,
+      "price_variance_report": true,
+      "currency_exposure_report": true,
+      "exception_summary_report": true
+    }
+  },
+  
+  "performance": {
+    "enable_monitoring": true,
+    "batch_size": 5000,
+    "parallel_processing": true,
+    "max_workers": 2,
+    "memory_limit_mb": 2000,
+    "cache_similarity_results": true,
+    "optimize_large_datasets": false,
+    "progress_reporting": true,
+    "enable_profiling": false
+  },
+  
+  "logging": {
+    "level": "INFO",
+    "log_to_file": true,
+    "log_file_path": "logs/portfolio_reconciliation.log",
+    "max_log_size_mb": 20,
+    "backup_count": 5,
+    "include_performance_logs": true,
+    "detailed_matching_logs": true,
+    "log_security_level_details": true,
+    "log_currency_conversions": true,
+    "log_exception_resolutions": true
+  },
+  
+  "validation": {
+    "validate_data_types": true,
+    "check_required_columns": true,
+    "validate_date_ranges": true,
+    "check_amount_reasonableness": true,
+    "validate_duplicates": true,
+    "security_id_validation": true,
+    "currency_code_validation": true,
+    "price_reasonableness_check": true,
+    "quantity_validation": true,
+    "market_value_calculation_check": true
+  },
+  
+  "security_handling": {
+    "normalize_security_identifiers": true,
+    "handle_multiple_identifiers": true,
+    "priority_identifier_order": ["ISIN", "CUSIP", "SEDOL", "TICKER"],
+    "validate_identifier_formats": true,
+    "handle_identifier_changes": true,
+    "maintain_identifier_history": false,
+    "cross_reference_identifiers": true
+  },
+  
+  "currency_handling": {
+    "enable_currency_conversion": true,
+    "base_currency": "USD",
+    "fx_rate_source": "manual",
+    "fx_rate_tolerance": 0.01,
+    "handle_multi_currency_portfolios": true,
+    "currency_exposure_reporting": true,
+    "validate_currency_codes": true,
+    "support_exotic_currencies": false
+  },
+  
+  "compliance": {
+    "regulatory_reporting": false,
+    "audit_trail": true,
+    "data_lineage_tracking": true,
+    "change_detection": true,
+    "approval_workflow": false,
+    "segregation_of_duties": false,
+    "exception_escalation": true
+  }
+}

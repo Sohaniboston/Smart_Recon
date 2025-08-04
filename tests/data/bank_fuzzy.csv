@@ -1,0 +1,5 @@
+Date,Amount,Description,Reference
+2025-01-01,105.0,Payment from ABC Corp client,PAY-001
+2025-01-03,75.5,Service charge bank fee,SVC-002
+2025-01-04,250.0,Deposit transfer customer,DEP-003
+2025-01-05,1000.0,Electronic wire payment,WIRE-004

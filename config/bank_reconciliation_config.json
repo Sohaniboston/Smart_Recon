@@ -1,0 +1,155 @@
+{
+  "name": "Bank Reconciliation Configuration",
+  "description": "Standard configuration for bank statement reconciliation",
+  "version": "1.1.0",
+  "last_updated": "2025-07-29",
+  
+  "data_ingestion": {
+    "supported_formats": ["csv", "xlsx", "xls"],
+    "encoding": "utf-8",
+    "auto_detect_encoding": true,
+    "auto_detect_delimiter": true,
+    "max_file_size_mb": 100,
+    "chunk_size": 10000,
+    "validate_on_load": true
+  },
+  
+  "column_mappings": {
+    "bank_data": {
+      "date": ["Transaction Date", "Date", "Value Date", "Post Date"],
+      "amount": ["Amount", "Transaction Amount", "Debit", "Credit"],
+      "description": ["Description", "Details", "Memo", "Transaction Details"],
+      "reference": ["Reference", "Transaction ID", "Check Number", "Reference Number"]
+    },
+    "gl_data": {
+      "date": ["GL Date", "Posting Date", "Transaction Date", "Date"],
+      "amount": ["Amount", "Debit Amount", "Credit Amount", "Net Amount"],
+      "description": ["Description", "GL Description", "Account Description", "Memo"],
+      "account": ["Account", "Account Number", "GL Account", "Account Code"],
+      "reference": ["Reference", "Document Number", "Voucher Number", "Check Number"]
+    }
+  },
+  
+  "data_cleaning": {
+    "date_formats": [
+      "%Y-%m-%d",
+      "%m/%d/%Y", 
+      "%d/%m/%Y",
+      "%Y/%m/%d",
+      "%d-%m-%Y",
+      "%m-%d-%Y"
+    ],
+    "amount_tolerance": 0.01,
+    "duplicate_threshold": 0.95,
+    "standardize_descriptions": true,
+    "remove_special_characters": false,
+    "normalize_whitespace": true,
+    "convert_to_uppercase": false,
+    "handle_currency_symbols": true,
+    "handle_parentheses_negative": true,
+    "trim_descriptions": true
+  },
+  
+  "exact_matching": {
+    "amount_tolerance": 0.01,
+    "date_range_days": 3,
+    "require_reference_match": false,
+    "case_sensitive_description": false,
+    "enable_amount_tolerance": true,
+    "enable_date_range": true,
+    "prioritize_reference_matches": true,
+    "matching_strategies": ["perfect", "amount_date", "amount_tolerance", "reference_amount"]
+  },
+  
+  "fuzzy_matching": {
+    "similarity_threshold": 0.8,
+    "confidence_threshold": 0.85,
+    "max_suggestions": 10,
+    "algorithms": ["token_set_ratio", "token_sort_ratio", "partial_ratio", "ratio"],
+    "algorithm_weights": {
+      "token_set_ratio": 0.4,
+      "token_sort_ratio": 0.3,
+      "partial_ratio": 0.2,
+      "ratio": 0.1
+    },
+    "enable_caching": true,
+    "require_manual_approval": false,
+    "auto_accept_threshold": 0.95,
+    "enable_amount_weighting": true,
+    "amount_weight": 0.3,
+    "description_weight": 0.6,
+    "date_weight": 0.1
+  },
+  
+  "exception_handling": {
+    "categorize_exceptions": true,
+    "exception_categories": {
+      "timing_differences": {
+        "description_patterns": ["pending", "processing", "hold"],
+        "date_threshold_days": 5
+      },
+      "amount_discrepancies": {
+        "tolerance_exceeded": 0.10,
+        "percentage_threshold": 0.05
+      },
+      "missing_transactions": {
+        "auto_detect": true,
+        "flag_large_amounts": 1000.00
+      },
+      "bank_fees": {
+        "description_patterns": ["fee", "charge", "service charge", "maintenance"],
+        "auto_categorize": true
+      }
+    },
+    "generate_resolution_suggestions": true,
+    "track_exception_history": true
+  },
+  
+  "reporting": {
+    "output_directory": "reports",
+    "generate_excel": true,
+    "generate_csv": true,
+    "generate_pdf": false,
+    "include_charts": true,
+    "include_summary_statistics": true,
+    "include_match_details": true,
+    "include_exception_analysis": true,
+    "excel_formatting": {
+      "highlight_exceptions": true,
+      "color_code_matches": true,
+      "freeze_header_rows": true,
+      "auto_fit_columns": true
+    }
+  },
+  
+  "performance": {
+    "enable_monitoring": true,
+    "batch_size": 1000,
+    "parallel_processing": false,
+    "memory_limit_mb": 1000,
+    "cache_similarity_results": true,
+    "optimize_large_datasets": false,
+    "progress_reporting": true,
+    "enable_profiling": false
+  },
+  
+  "logging": {
+    "level": "INFO",
+    "log_to_file": true,
+    "log_file_path": "logs/smartrecon.log",
+    "max_log_size_mb": 10,
+    "backup_count": 5,
+    "include_performance_logs": true,
+    "detailed_matching_logs": false
+  },
+  
+  "validation": {
+    "validate_data_types": true,
+    "check_required_columns": true,
+    "validate_date_ranges": true,
+    "check_amount_reasonableness": true,
+    "max_amount_threshold": 1000000.00,
+    "min_amount_threshold": -1000000.00,
+    "validate_duplicates": true
+  }
+}
